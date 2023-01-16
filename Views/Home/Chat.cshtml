@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Live Reviews";
+}
+<h3>@ViewData["Title"]</h3>
+<p>A live chat dedicated to music is a great way for music lovers to connect and share their passion for music. Here you can discuss different genres and artists, share music, and even recommend new music to explore. It's a great place to meet fellow music fans, find new music, and discuss the latest trends in the music world.</p>
+<div class="container">
+    <div class="row">
+        <div class="col-2"><h4>Your take</h4></div><br />
+        <div><textarea type="text" id="messageInput" class="form-control"></textarea></div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-6">
+            <input type="button" id="sendButton" value="Spread the message" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <ul id="messagesList"></ul>
+    </div>
+</div>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>

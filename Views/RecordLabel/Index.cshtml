@@ -1,0 +1,125 @@
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model ProiectMPA_1.Models.LibraryViewModels.PublisherIndexData
+
+@{
+    ViewData["Title"] = "Record Labels";
+}
+
+<h3>Studios</h3>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Record Label</th>
+            <th>Address</th>
+            <th>Albums Released</th>
+            <th>Latest Albums</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Publishers)
+        {
+            string selectedRow = "";
+            if (item.ID == (int?)ViewData["PublisherID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublisherName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adress)
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => item.PublishedBooks.Count)
+                </td>
+                <td>
+                    @{
+                        foreach (var book in item.PublishedBooks.Take(3))
+                        {
+                            @book.Book.Title <br />
+                        }
+                    }
+
+                </td>
+                <td>
+                    <a asp-action="Index" asp-route-id="@item.ID">Select</a> |
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Books != null)
+{
+    <h3>Books published by selected publisher</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Title</th>
+            @*<th>Author</th>*@
+            <th>Price</th>
+        </tr>
+        @foreach (var item in Model.Books)
+        {
+            string selectedRow = "";
+            if (item.ID == (int?)ViewData["BookID"])
+            {
+                selectedRow = "Success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Select", "Index", new { bookID = item.ID })
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                @*<td>
+                    @item.Author
+                </td>*@
+                <td>
+                    @item.Price
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@if (Model.Orders != null)
+{
+    <h3>Clients who ordered the selected book</h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Birth date</th>
+        </tr>
+        @foreach (var item in Model.Orders)
+        {
+            string selectedRow = "";
+            if (item.OrderID == (int?)ViewData["BookID"])
+            {
+                selectedRow = "Success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @item.Customer.Name
+                </td>
+                <td>
+                    @item.Customer.Adress
+                </td>
+                <td>
+                    @item.Customer.BirthDate.ToString("MMMM dd, yyyy")
+                </td>
+            </tr>
+        }
+    </table>
+}

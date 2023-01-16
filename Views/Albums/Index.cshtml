@@ -1,0 +1,73 @@
+﻿@model PaginatedList<Book>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Find the latest and greatest here  <a asp-action="Create" class="btn btn-outline-success">New Entry</a> </h3>
+<p>This page shows a list of all the artists in our database. You can search for a specific artist by name or browse the entire list. The list includes both professional and amateur artists. Each artist's profile includes information such as their biography, works, and contact information. You can also view their artwork and read reviews of their work.</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <input class="form-control form-control-sm" type="text" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Got a favorite? Search here!" />
+        </p>
+    </div>
+</form>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Title</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Rating</a>
+            </th>
+            <th>
+                Singer
+                @*<a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Author</a>*@
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.FullName)
+            </td>
+
+                <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-info">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.ID" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
